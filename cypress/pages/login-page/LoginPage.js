@@ -1,6 +1,8 @@
 import { LoginSelector } from "./LoginSelecors";
 
 class LoginPage {
+  // Arrange
+
   // Actions
   visitLoginPage() {
     cy.visit("/");
@@ -18,10 +20,12 @@ class LoginPage {
   }
 
   // TODO: Take values from fixtures
-  login(username = "standard_user", password = "secret_sauce") {
+  login(username = null, password = null) {
     this.visitLoginPage();
-    this.enterUser(username);
-    this.enterPassword(password);
+    cy.fixture("login").then((user) => {
+      this.enterUser(username || user.username);
+      this.enterPassword(password || user.password);
+    });
     this.submitLogin();
   }
 

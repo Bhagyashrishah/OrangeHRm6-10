@@ -4,13 +4,11 @@ import { DashboardSelector } from "./DashboardSelecors";
 
 const FirstProductPrice = 29.99;
 const footerPage = new FooterPage();
-// const FooterPage = new Footer();
 class DashboardPage {
   // Actions
 
   // Assurance
   verifyUrl() {
-    // cy.url().should('include', '/inventory.html');
     cy.url().should("include", DashboardSelector.dashboardUrl);
   }
 
