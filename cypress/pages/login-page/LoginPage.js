@@ -22,6 +22,7 @@ class LoginPage {
   // TODO: Take values from fixtures
   login(username = null, password = null) {
     this.visitLoginPage();
+    // TODO: Use this from .env
     cy.fixture("login").then((user) => {
       this.enterUser(username || user.username);
       this.enterPassword(password || user.password);

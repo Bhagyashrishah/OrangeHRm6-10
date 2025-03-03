@@ -6,6 +6,7 @@ describe("Dashboard Test", () => {
     cy.login();
     dashboardPage.verifyDashboardPage();
   });
+
   it("Check first price", () => {
     cy.login();
     dashboardPage.checkFirstPrice();
