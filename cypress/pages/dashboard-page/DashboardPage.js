@@ -1,7 +1,8 @@
-import { extractPriceAsNumber } from "../../helpers/dashboard/dashboard-helper";
+import DashboardHelper from "../../helpers/dashboard/DashboardHelper";
 import { DASHBOARD_ENDPOINTS } from "../../support/dashboard/dashboard-services";
+import { API_METHODS } from "../../utils/constants/global/API_CONSTANTS";
 import FooterPage from "../common/FooterPage";
-import { DashboardSelector } from "./DashboardSelecors";
+import DashboardSelector from "./DashboardSelecors";
 
 const FirstProductPrice = 29.99;
 const footerPage = new FooterPage();
@@ -9,7 +10,7 @@ class DashboardPage {
   // Arrange
 
   interceptProduct() {
-    cy.intercept("GET", DASHBOARD_ENDPOINTS.GET_PRODUCTS.URL).as(
+    cy.intercept(API_METHODS.GET, DASHBOARD_ENDPOINTS.GET_PRODUCTS.URL).as(
       DASHBOARD_ENDPOINTS.GET_PRODUCTS.NAME,
     );
   }
@@ -43,7 +44,7 @@ class DashboardPage {
     cy.get(DashboardSelector.firstProductPrice)
       .first()
       .then(($price) => {
-        const priceNumber = extractPriceAsNumber($price.text());
+        const priceNumber = DashboardHelper.extractPriceAsNumber($price.text());
         expect(priceNumber).to.equal(FirstProductPrice);
       });
   }

@@ -1,4 +1,4 @@
-import { LoginSelector } from "./LoginSelecors";
+import LoginSelector from "./LoginSelecors";
 
 class LoginPage {
   // Arrange
