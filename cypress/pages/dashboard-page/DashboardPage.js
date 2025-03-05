@@ -1,11 +1,23 @@
 import { extractPriceAsNumber } from "../../helpers/dashboard/dashboard-helper";
+import { DASHBOARD_ENDPOINTS } from "../../support/dashboard/dashboard-services";
 import FooterPage from "../common/FooterPage";
 import { DashboardSelector } from "./DashboardSelecors";
 
 const FirstProductPrice = 29.99;
 const footerPage = new FooterPage();
 class DashboardPage {
-  // Actions
+  // Arrange
+
+  interceptProduct() {
+    cy.intercept("GET", DASHBOARD_ENDPOINTS.GET_PRODUCTS.URL).as(
+      DASHBOARD_ENDPOINTS.GET_PRODUCTS.NAME,
+    );
+  }
+  waitForInterceptProduct() {
+    cy.wait(`@${DASHBOARD_ENDPOINTS.GET_PRODUCTS.NAME}`).then(($dashboard) => {
+      cy.wrap($dashboard).should("have.property", "id").and("not.be.empty");
+    });
+  }
 
   // Assurance
   verifyUrl() {
