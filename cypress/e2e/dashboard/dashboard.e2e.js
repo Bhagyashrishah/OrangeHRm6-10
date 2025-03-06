@@ -1,5 +1,4 @@
 import DashboardPage from "../../pages/dashboard-page/DashboardPage";
-import { DASHBOARD_ENDPOINTS } from "../../support/dashboard/dashboard-services";
 
 const dashboardPage = new DashboardPage();
 

@@ -10,12 +10,16 @@
 //
 //
 
-import LoginPage from "../pages/login-page/LoginPage";
-
 // -- This is a parent command --
 Cypress.Commands.add("login", (username, password) => {
-  const loginPage = new LoginPage();
-  loginPage.login(username, password);
+  cy.visit("/");
+  cy.get("[data-test='username']").type(
+    username || Cypress.env("CYPRESS_USERNAME"),
+  );
+  cy.get("[data-test='password']").type(
+    password || Cypress.env("CYPRESS_PASSWORD"),
+  );
+  cy.get("#login-button").click();
 });
 //
 //
@@ -29,4 +33,3 @@ Cypress.Commands.add("login", (username, password) => {
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
-
