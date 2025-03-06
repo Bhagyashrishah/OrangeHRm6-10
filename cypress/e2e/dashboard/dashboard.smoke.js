@@ -5,6 +5,7 @@ const dashboardPage = new DashboardPage();
 describe("Dashboard Test", () => {
   beforeEach(() => {
     dashboardPage.interceptProduct();
+    dashboardPage.loadProducts();
   });
 
   it("Check first price", () => {
