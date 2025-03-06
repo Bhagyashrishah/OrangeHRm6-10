@@ -21,21 +21,26 @@ module.exports = defineConfig({
   },
 });
 
-function isDevEnv() {
+function getEnvironment() {
   const env = process.env.CYPRESS_ENVIRONMENT;
   if (!env) {
     throw new Error("CYPRESS_ENVIRONMENT is required but not set.");
   }
-
-  return process.env.CYPRESS_ENVIRONMENT === "dev";
+  return env;
 }
 
 function getSpecPattern() {
-  let TEST_TYPE_CONFIG = isDevEnv() ? "e2e" : "smoke";
-  if (isDevEnv()) {
-    console.log(`Executing ${TEST_TYPE_CONFIG} Tests in DEV environment`);
-    return path.join("cypress", "e2e", "**", `*.${TEST_TYPE_CONFIG}.js`);
-  }
-  console.log(`Executing ${TEST_TYPE_CONFIG} Tests in PROD environment`);
-  return path.join("cypress", "e2e", "**", `*.${TEST_TYPE_CONFIG}.js`);
+  const isDev = getEnvironment() === "dev";
+  const testType = isDev ? "e2e" : "smoke";
+
+  console.log(
+    `Executing ${testType} Tests in ${isDev ? "DEV" : "PROD"} environment`,
+  );
+
+  return path.join(
+    "cypress",
+    "e2e",
+    "**",
+    `*.${isDev ? "js" : `${testType}.js`}`,
+  );
 }
