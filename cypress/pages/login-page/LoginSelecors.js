@@ -1,7 +1,7 @@
 const LoginSelector = {
   usernameInput: "[data-test='username']",
   passwordInput: "[data-test='password']",
-  loginButton: "#login-button",
+  loginButton: '#login-button',
 };
 
 export default LoginSelector;

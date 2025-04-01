@@ -11,15 +11,15 @@
 //
 
 // -- This is a parent command --
-Cypress.Commands.add("login", (username, password) => {
-  cy.visit("/");
+Cypress.Commands.add('login', (username, password) => {
+  cy.visit('/');
   cy.get("[data-test='username']").type(
-    username || Cypress.env("CYPRESS_USERNAME"),
+    username || Cypress.env('CYPRESS_USERNAME')
   );
   cy.get("[data-test='password']").type(
-    password || Cypress.env("CYPRESS_PASSWORD"),
+    password || Cypress.env('CYPRESS_PASSWORD')
   );
-  cy.get("#login-button").click();
+  cy.get('#login-button').click();
 });
 //
 //

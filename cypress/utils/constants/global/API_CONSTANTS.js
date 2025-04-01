@@ -1,11 +1,11 @@
 export const API_METHODS = {
-  GET: "GET",
-  POST: "POST",
-  PUT: "PUT",
-  DELETE: "DELETE",
-  PATCH: "PATCH",
-  OPTIONS: "OPTIONS",
-  HEAD: "HEAD",
+  GET: 'GET',
+  POST: 'POST',
+  PUT: 'PUT',
+  DELETE: 'DELETE',
+  PATCH: 'PATCH',
+  OPTIONS: 'OPTIONS',
+  HEAD: 'HEAD',
 };
 
 export const HTTP_STATUS_CODES = {

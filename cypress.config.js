@@ -1,7 +1,10 @@
-const { defineConfig } = require("cypress");
-const dotenv = require("dotenv");
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-undef */
+
+const { defineConfig } = require('cypress');
+const dotenv = require('dotenv');
 dotenv.config();
-const path = require("path");
+const path = require('path');
 
 module.exports = defineConfig({
   env: {
@@ -24,23 +27,23 @@ module.exports = defineConfig({
 function getEnvironment() {
   const env = process.env.CYPRESS_ENVIRONMENT;
   if (!env) {
-    throw new Error("CYPRESS_ENVIRONMENT is required but not set.");
+    throw new Error('CYPRESS_ENVIRONMENT is required but not set.');
   }
   return env;
 }
 
 function getSpecPattern() {
-  const isDev = getEnvironment() === "dev";
-  const testType = isDev ? "e2e" : "smoke";
+  const isDev = getEnvironment() === 'dev';
+  const testType = isDev ? 'e2e' : 'smoke';
 
   console.log(
-    `Executing ${testType} Tests in ${isDev ? "DEV" : "PROD"} environment`,
+    `Executing ${testType} Tests in ${isDev ? 'DEV' : 'PROD'} environment`
   );
 
   return path.join(
-    "cypress",
-    "e2e",
-    "**",
-    `*.${isDev ? "js" : `${testType}.js`}`,
+    'cypress',
+    'e2e',
+    '**',
+    `*.${isDev ? 'js' : `${testType}.js`}`
   );
 }

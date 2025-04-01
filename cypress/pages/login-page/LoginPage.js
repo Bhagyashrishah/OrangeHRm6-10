@@ -1,11 +1,11 @@
-import LoginSelector from "./LoginSelecors";
+import LoginSelector from './LoginSelecors';
 
 class LoginPage {
   // Arrange
 
   // Actions
   visitLoginPage() {
-    cy.visit("/");
+    cy.visit('/');
   }
   enterUser(username) {
     cy.get(LoginSelector.usernameInput).type(username);
