@@ -3,9 +3,12 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "lint": "eslint .",
+    "format": "prettier --write .",
     "test": "echo \"Error: no test specified\" && exit 1",
     "cypress:run": "cypress run",
-    "start": "bash ./scripts/main.sh && cypress open"
+    "start": "bash ./scripts/main.sh && cypress open",
+    "prepare": "husky"
   },
   "keywords": [],
   "author": "",
@@ -14,5 +17,22 @@
   "dependencies": {
     "cypress": "^14.0.3",
     "dotenv": "^16.4.7"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.23.0",
+    "eslint": "^9.23.0",
+    "eslint-config-prettier": "^10.1.1",
+    "eslint-plugin-cypress": "^4.2.0",
+    "eslint-plugin-prettier": "^5.2.5",
+    "globals": "^16.0.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.0",
+    "prettier": "^3.5.3"
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "prettier --write"
+    ]
   }
 }
