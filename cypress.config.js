@@ -1,26 +1,40 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
 
-const { defineConfig } = require('cypress');
 const dotenv = require('dotenv');
-dotenv.config();
+dotenv.config(); // Load .env file variables
+const { defineConfig } = require('cypress');
+const fs = require('fs');
 const path = require('path');
 
 module.exports = defineConfig({
   env: {
-    // INFO: Keep env in setupNodeEvents if we have to change the value dynamically
-    // Ref: https://docs.cypress.io/api/cypress-api/env#From-a-plugin
     CYPRESS_USERNAME: process.env.CYPRESS_USERNAME,
     CYPRESS_PASSWORD: process.env.CYPRESS_PASSWORD,
   },
   e2e: {
-    // Add spec pattern
     watchForFileChanges: false,
     baseUrl: process.env.CYPRESS_BASEURL,
     specPattern: getSpecPattern(),
     setupNodeEvents(on, config) {
-      // implement node event listeners here
+      require('cypress-mochawesome-reporter/plugin')(on);
+      // Register the mochawesome reporter
+      return config;
     },
+  },
+  defaultCommandTimeout: 10000,
+  pageLoadTimeout: 50000,
+  reporter: 'cypress-mochawesome-reporter',
+  reporterOptions: {
+    reportDir: 'cypress/mochaReports',
+    overwrite: true,
+    saveJson: true,
+    html: true, // Ensure HTML is enabled
+    reportFilename: 'mochawesome-report',
+    charts: true,
+    embeddedScreenshots: true,
+    inlineAssets: true,
+    saveAllAttempts: false,
   },
 });
 
