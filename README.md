@@ -81,6 +81,58 @@ cypress
 - **Bash or other Scripts are located in the `scripts/` folder**.
 - Add necessary scripts which are necessary to run before and after the cypress test
 
+
+## 🏷 Tags & Filtering
+
+This project uses @cypress/grep for tag-based test filtering.
+
+Example to Tag your test:
+
+```js
+describe('login flow', { tags: ['smoke', 'dashboard'] }, () => {
+  it('should log in successfully', () => {
+    // test logic
+  });
+});
+```
+*Note: Use the tags from the enum defined in the constant. Not a hard core value*
+
+**Run test with specific text contain or tag**
+
+```sh
+npx cypress run --env grep=smoke
+```
+ 
+ **Run test with multiple tags**
+ ```sh
+ npx cypress run --env grepTags=@dashboard+@smoke
+ ```
+
+
+### 🔧 Linting & Formatting
+
+This project uses **ESLint** and **Prettier** to maintain code quality and consistent formatting.
+
+- Linting is **automatically executed before every commit** via Git hooks (using Husky).
+- If any linting or formatting errors are detected, the commit will be blocked until they are fixed.
+
+#### Manual Usage
+
+To run linting manually:
+
+```sh
+npm run lint
+```
+
+To format code manually:
+
+```sh
+npm run format
+```
+
+> Let's keep our code linted and formatted.
+
+
 ## 🏃 Running Tests
 
 ### Run all tests:
@@ -100,6 +152,7 @@ npx cypress open
 ```sh
 npx cypress run --spec "cypress/e2e/login/login.e2e.js"
 ```
+
 
 ## 📌 Best Practices
 

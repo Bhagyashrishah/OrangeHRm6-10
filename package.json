@@ -21,6 +21,7 @@
     "pug": "^3.0.3"
   },
   "devDependencies": {
+    "@cypress/grep": "^4.1.0",
     "@eslint/js": "^9.23.0",
     "cypress-mochawesome-reporter": "^3.8.2",
     "eslint": "^9.23.0",

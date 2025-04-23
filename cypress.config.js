@@ -11,14 +11,17 @@ module.exports = defineConfig({
   env: {
     CYPRESS_USERNAME: process.env.CYPRESS_USERNAME,
     CYPRESS_PASSWORD: process.env.CYPRESS_PASSWORD,
+    grepFilterSpecs: true,
   },
   e2e: {
     watchForFileChanges: false,
     baseUrl: process.env.CYPRESS_BASEURL,
     specPattern: getSpecPattern(),
     setupNodeEvents(on, config) {
-      require('cypress-mochawesome-reporter/plugin')(on);
       // Register the mochawesome reporter
+      require('cypress-mochawesome-reporter/plugin')(on);
+      // Register grep plugin for the node process
+      require('@cypress/grep/src/plugin')(config);
       return config;
     },
   },
@@ -54,10 +57,5 @@ function getSpecPattern() {
     `Executing ${testType} Tests in ${isDev ? 'DEV' : 'PROD'} environment`
   );
 
-  return path.join(
-    'cypress',
-    'e2e',
-    '**',
-    `*.${isDev ? 'js' : `${testType}.js`}`
-  );
+  return path.join('cypress', 'e2e', '**', `*.js`);
 }
