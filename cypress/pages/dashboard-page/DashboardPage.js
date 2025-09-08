@@ -1,6 +1,4 @@
 import DashboardHelper from '../../helpers/dashboard/DashboardHelper';
-import { DASHBOARD_ENDPOINTS } from '../../support/dashboard/dashboard-services';
-import { API_METHODS } from '../../utils/constants/global/API_CONSTANTS';
 import FooterPage from '../common/FooterPage';
 import DashboardSelector from './DashboardSelecors';
 
@@ -10,17 +8,6 @@ class DashboardPage {
 
   loadProducts() {
     cy.fixture('dashboard/products').as('products');
-  }
-
-  interceptProduct() {
-    cy.intercept(API_METHODS.GET, DASHBOARD_ENDPOINTS.GET_PRODUCTS.URL).as(
-      DASHBOARD_ENDPOINTS.GET_PRODUCTS.NAME
-    );
-  }
-  waitForInterceptProduct() {
-    cy.wait(`@${DASHBOARD_ENDPOINTS.GET_PRODUCTS.NAME}`).then(($dashboard) => {
-      cy.wrap($dashboard).should('have.property', 'id').and('not.be.empty');
-    });
   }
 
   // Assurance
@@ -43,20 +30,17 @@ class DashboardPage {
     footerPage.verifyCopyrightText();
   }
 
-  checkFirstPrice() {
+  checkFirstPrice(fixtureAliases) {
     cy.get(DashboardSelector.firstProductPrice)
       .first()
       .then(($price) => {
         const priceNumber = DashboardHelper.extractPriceAsNumber($price.text());
 
-        cy.get('@products').then(($products) => {
-          expect(priceNumber).to.equal($products.FirstProductPrice);
+        cy.get(fixtureAliases).then(($products) => {
+          // Get the price from the first product in the products array
+          const expectedPrice = $products.products[0].price;
+          expect(priceNumber).to.equal(expectedPrice);
         });
-
-        // INFO: Fixture can be used directly like this as well. But we prefer to use alias instead
-        // cy.fixture("/dashboard/products").then(($product) => {
-        //   expect(priceNumber).to.equal($product.FirstProductPrice);
-        // });
       });
   }
 }

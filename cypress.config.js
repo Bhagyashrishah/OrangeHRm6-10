@@ -51,11 +51,11 @@ function getEnvironment() {
 
 function getSpecPattern() {
   const isDev = getEnvironment() === 'dev';
-  const testType = isDev ? 'e2e' : 'smoke';
+  const testType = isDev ? 'end-to-end' : 'smoke';
 
   console.log(
     `Executing ${testType} Tests in ${isDev ? 'DEV' : 'PROD'} environment`
   );
 
-  return path.join('cypress', 'e2e', '**', `*.js`);
+  return path.join('cypress', 'e2e', '**', `${testType}`, `**`, `*.js`);
 }

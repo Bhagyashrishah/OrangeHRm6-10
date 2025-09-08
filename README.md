@@ -1,172 +1,397 @@
-# Cypress Page Object Model (POM) Project
+# Cypress Automation Framework - Best Practices Boilerplate
 
 ## 📌 Overview
 
-This project follows the **Page Object Model (POM) architecture** to structure Cypress end-to-end tests efficiently. The POM pattern helps in maintaining test scripts by separating test logic from page interactions.
+This is a comprehensive Cypress automation framework boilerplate that follows industry best practices and provides a solid foundation for QA teams to build scalable, maintainable end-to-end tests. The framework implements the Page Object Model (POM) pattern and includes advanced features like tagging, reporting, CI/CD integration, and comprehensive documentation.
 
-## 🛠 Prerequisites
+## 🏗 Framework Architecture
 
-Ensure you have the following installed before setting up the project:
+### Core Concepts Implemented
+
+- **Page Object Model (POM)**: Clean separation of test logic and page interactions
+- **Custom Commands**: Reusable commands for common actions
+- **Environment Management**: Multi-environment support with dotenv
+- **Test Tagging**: Flexible test filtering with @cypress/grep
+- **Comprehensive Reporting**: Mochawesome HTML reports with screenshots
+- **Code Quality**: ESLint, Prettier, and Husky for consistent code standards
+- **API Testing**: Built-in API command support
+- **Visual Testing**: Ready for visual regression testing
+- **Accessibility Testing**: Axe integration for accessibility checks
+
+### Project Structure
+
+```
+cypress-automation-boilerplate/
+├── cypress/
+│   ├── docs/                 # Framework documentation
+│   │   └── best-practices.md
+│   ├── e2e/                  # End-to-end test files
+│   │   ├── smoke/            # Critical path tests
+│   │   └── end-to-end/       # Comprehensive feature tests
+│   ├── fixtures/             # Test data files
+│   ├── pages/                # Page Object Models
+│   │   ├── common/           # Shared page objects
+│   │   ├── dashboard-page/   # Feature-specific pages
+│   │   └── login-page/
+│   ├── support/              # Custom commands & utilities
+│   │   ├── commands.js       # General custom commands
+│   │   ├── api-commands.js   # API-related commands
+│   │   └── e2e.js           # Global setup
+│   ├── utils/                # Utility functions
+│   │   ├── constants/        # Project constants
+│   │   └── helpers/          # Test helper functions
+│   ├── screenshots/          # Test failure screenshots
+│   └── videos/               # Test execution videos
+├── scripts/                  # Setup and utility scripts
+├── cypress.config.js         # Cypress configuration
+├── package.json              # Dependencies and scripts
+└── README.md
+```
+
+## � Quick Start
+
+### Prerequisites
 
 - **Node.js** v18+
-- **npm** (or **yarn** if preferred)
+- **npm** or **yarn**
+- **Git** for version control
 
-## 🚀 Installation
+### Installation
 
-1. Clone the repository:
-   ```sh
-   git clone https://github.com/lfyagya/cypress-automation-boilerplate
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/lfyagya/cypress-automation-boilerplate.git
    cd cypress-automation-boilerplate
    ```
-2. Install dependencies:
-   ```sh
+
+2. **Install dependencies**
+   ```bash
    npm install
    ```
 
-## 🏗 Project Structure
+3. **Set up environment variables**
+   ```bash
+   cp .env.example .env
+   # Edit .env with your application URLs and credentials
+   ```
 
-```sh
-cypress
-├── docs                 # Documentation files
-│   └── best-practices.md
-├── e2e                  # Test files organized by feature
-│   ├── dashboard
-│   │   ├── dashboard.e2e.js      # Full end-to-end test
-│   │   └── dashboard.smoke.js    # Smoke test for dashboard
-│   └── login
-│       └── login.e2e.js          # Login tests
-├── fixtures             # Mock data for API responses or UI interactions
-│   ├── dashboard
-│   │   └── products.json
-│   └── example.json
-├── helpers              # Helper functions related to specific features
-│   └── dashboard
-│       └── DashboardHelper.js
-├── pages                # Page Object Model files
-│   ├── common
-│   │   └── FooterPage.js
-│   ├── dashboard-page
-│   │   ├── DashboardPage.js      # Dashboard actions
-│   │   └── DashboardSelectors.js # Dashboard element selectors
-│   └── login-page
-│       ├── LoginPage.js          # Login actions
-│       └── LoginSelectors.js     # Login element selectors
-├── support              # Custom Cypress commands & services
-│   ├── api-commands.js  # API-related custom commands
-│   ├── commands.js      # General custom Cypress commands
-│   ├── dashboard
-│   │   └── dashboard-services.js # Dashboard API services
-│   └── e2e.js           # Global Cypress setup
-└── utils                # Common utility functions
-    ├── constants        # Project-wide constants
-    │   ├── global
-    │   │   └── API_CONSTANTS.js  # Global API constants
-    │   └── module
-    └── date-time.js     # Utility functions for date/time operations
-├── scripts              # Bash scripts for setup (example teardown)
-│   ├── tear-down.sh
-│   ├── tear-up.sh
+4. **Run setup script**
+   ```bash
+   npm run setup
+   ```
+
+5. **Start testing**
+   ```bash
+   npm run cypress:open  # Interactive mode
+   npm run cypress:run   # Headless mode
+   ```
+
+## ⚙️ Configuration
+
+### Environment Variables
+
+Create a `.env` file in the root directory:
+
+```env
+# Application URLs
+CYPRESS_BASEURL=https://your-app.com
+CYPRESS_API_URL=https://api.your-app.com
+
+# Authentication
+CYPRESS_USERNAME=testuser
+CYPRESS_PASSWORD=testpass
+
+# Test Environment
+CYPRESS_ENVIRONMENT=dev  # dev, staging, prod
+
+# Reporting
+CYPRESS_RECORD_KEY=your-record-key
 ```
 
-## 📝 Writing Tests
+### Cypress Configuration
 
-- **Tests are located in the `e2e/` folder**.
-- Each feature (e.g., login, dashboard) has its own directory.
-- End-to-end tests should be named with `.e2e.js`.
-- Smoke tests should be named with `.smoke.js`.
+The `cypress.config.js` includes:
 
-- **Documentations are located in the `docs/` folder**.
-- Maintain the docs as per its test folder strucure
+- **Environment-specific settings**: Different configs for dev/staging/prod
+- **Custom reporters**: Mochawesome for detailed HTML reports
+- **Test isolation**: Clean browser context between tests
+- **Timeouts**: Optimized for different scenarios
+- **Video recording**: Automatic video capture on failures
+- **Screenshots**: Automatic screenshots on test failures
 
-- **Bash or other Scripts are located in the `scripts/` folder**.
-- Add necessary scripts which are necessary to run before and after the cypress test
+## 🧪 Writing Tests
 
+### Test Structure (AAA Pattern)
 
-## 🏷 Tags & Filtering
+```javascript
+describe('User Authentication', { tags: '@smoke @login' }, () => {
+  beforeEach(() => {
+    // Arrange - Set up test conditions
+    cy.login();
+  });
 
-This project uses @cypress/grep for tag-based test filtering.
+  it('should login successfully', () => {
+    // Act - Perform the action
+    cy.visit('/dashboard');
 
-Example to Tag your test:
-
-```js
-describe('login flow', { tags: ['smoke', 'dashboard'] }, () => {
-  it('should log in successfully', () => {
-    // test logic
+    // Assert - Verify the outcome
+    cy.url().should('include', '/dashboard');
+    cy.get('[data-cy="welcome-message"]').should('be.visible');
   });
 });
 ```
-*Note: Use the tags from the enum defined in the constant. Not a hard core value*
 
-**Run test with specific text contain or tag**
+### Page Object Model Usage
 
-```sh
-npx cypress run --env grep=smoke
+```javascript
+// In your test file
+import DashboardPage from '../../pages/dashboard-page/DashboardPage';
+
+const dashboardPage = new DashboardPage();
+
+it('should display dashboard correctly', () => {
+  cy.login();
+  dashboardPage.verifyDashboardPage();
+  dashboardPage.checkFirstPrice('@products');
+});
 ```
- 
- **Run test with multiple tags**
- ```sh
- npx cypress run --env grepTags=@dashboard+@smoke
- ```
 
+### Custom Commands
 
-### 🔧 Linting & Formatting
+```javascript
+// Using built-in custom commands
+cy.login('username', 'password');
+cy.typeText('[data-cy="email"]', 'user@example.com');
+cy.clickElement('[data-cy="submit-btn"]');
+cy.waitForLoading('[data-cy="spinner"]');
+```
 
-This project uses **ESLint** and **Prettier** to maintain code quality and consistent formatting.
+## 🏷 Test Organization & Tagging
 
-- Linting is **automatically executed before every commit** via Git hooks (using Husky).
-- If any linting or formatting errors are detected, the commit will be blocked until they are fixed.
+### Tag Structure
 
-#### Manual Usage
+- **@smoke**: Critical path tests
+- **@regression**: Full feature tests
+- **@login**: Authentication tests
+- **@dashboard**: Dashboard feature tests
+- **@wip**: Work in progress
+- **@flaky**: Known flaky tests
 
-To run linting manually:
+### Running Tests by Tags
 
-```sh
+```bash
+# Run smoke tests
+npm run test:smoke
+
+# Run specific feature tests
+npm run test:dashboard
+
+# Run tests with multiple tags
+npx cypress run --env grepTags="@dashboard+@smoke"
+```
+
+## � Reporting
+
+### Mochawesome Reports
+
+- **HTML Reports**: Detailed test execution reports
+- **Screenshots**: Automatic screenshots on failures
+- **Videos**: Test execution videos
+- **Charts**: Visual test metrics
+
+### Viewing Reports
+
+```bash
+# Generate and view HTML report
+npm run report:generate
+npm run report:open
+```
+
+## 🔧 Development Workflow
+
+### Code Quality
+
+```bash
+# Lint code
 npm run lint
-```
 
-To format code manually:
-
-```sh
+# Format code
 npm run format
+
+# Run both
+npm run quality
 ```
 
-> Let's keep our code linted and formatted.
+### Git Hooks
 
+- **Pre-commit**: Automatic linting and formatting
+- **Pre-push**: Run smoke tests before pushing
 
-## 🏃 Running Tests
+## 🚀 CI/CD Integration
 
-### Run all tests:
+### GitHub Actions Example
 
-```sh
-npx cypress run
+```yaml
+name: Cypress Tests
+on: [push, pull_request]
+
+jobs:
+  cypress-run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: cypress-io/github-action@v5
+        with:
+          browser: chrome
+          record: true
+        env:
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
 ```
 
-### Run tests in interactive mode:
+### Parallel Execution
 
-```sh
-npx cypress open
+```bash
+# Run tests in parallel
+npm run test:parallel
+
+# Run on multiple browsers
+npm run test:cross-browser
 ```
 
-### Run a specific test suite:
+## 📚 Advanced Features
 
-```sh
-npx cypress run --spec "cypress/e2e/login/login.e2e.js"
+### API Testing
+
+```javascript
+// API command examples
+cy.api('GET', '/api/users').should('have.property', 'status', 200);
+cy.api('POST', '/api/users', { name: 'John' }).its('body').should('have.property', 'id');
 ```
 
+### Visual Testing
 
-## 📌 Best Practices
+```javascript
+// Visual regression testing
+cy.eyesOpen('My App');
+cy.eyesCheckWindow('Dashboard Page');
+cy.eyesClose();
+```
 
-- Follow **Page Object Model (POM)** to keep tests maintainable.
-- Use **fixtures** for reusable test data.
-- Place **constants** inside `utils/constants/`.
-- Use **selectors files** for element locators instead of hardcoding them in tests.
-- Use **helpers** for specific help that page require.
+### Accessibility Testing
 
-## 📄 Additional Documentation for reference
+```javascript
+// Accessibility checks
+cy.injectAxe();
+cy.checkA11y();
+```
 
-- [Cypress Official Docs](https://docs.cypress.io/)
-- [Best Practices](docs/best-practices.md)
+## 🛠 Utilities & Helpers
+
+### Date/Time Utilities
+
+```javascript
+import { formatDate, addDays } from '../../utils/date-time';
+
+const futureDate = addDays(new Date(), 7);
+cy.get('[data-cy="date-picker"]').type(formatDate(futureDate));
+```
+
+### Test Data Management
+
+```javascript
+// Using fixtures
+cy.fixture('users/valid-user').as('userData');
+cy.get('@userData').then((user) => {
+  cy.login(user.email, user.password);
+});
+```
+
+## 📖 Documentation
+
+### Available Docs
+
+- **[Script Reference](cypress/docs/script-reference.md)**: Complete guide to all npm scripts
+- **[Best Practices Guide](cypress/docs/best-practices.md)**: Comprehensive testing guidelines
+- **[Naming Conventions](cypress/docs/naming-conventions.md)**: Standardized naming patterns for the framework
+- **[Network Debugging Guide](cypress/docs/network-debugging-guide.md)**: Fix cy.wait() timeout errors
+- **[API Reference](cypress/docs/api-reference.md)**: Custom commands documentation
+- **[Setup Guide](cypress/docs/setup-guide.md)**: Detailed setup instructions
+- **[Troubleshooting](cypress/docs/troubleshooting.md)**: Common issues and solutions
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests for new functionality
+5. Ensure all tests pass
+6. Submit a pull request
+
+### Contribution Guidelines
+
+- Follow the established code style
+- Add tests for new features
+- Update documentation as needed
+- Use conventional commit messages
+
+## 📋 Available Scripts
+
+```json
+{
+  "scripts": {
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run",
+    "test:smoke": "cypress run --env grep=@smoke",
+    "test:regression": "cypress run --env grep=@regression",
+    "test:dashboard": "cypress run --env grep=@dashboard",
+    "test:parallel": "cypress run --parallel --record",
+    "report:generate": "mochawesome-merge cypress/mochaReports/*.json > cypress/mochaReports/report.json && mochawesome-report-generator cypress/mochaReports/report.json",
+    "report:open": "open cypress/mochaReports/mochawesome-report.html",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "quality": "npm run lint && npm run format",
+    "setup": "bash scripts/setup.sh"
+  }
+}
+```
+
+## 🐛 Troubleshooting
+
+### Common Issues
+
+1. **Tests timing out**: Check network conditions and increase timeouts if needed
+2. **Element not found**: Use `data-cy` attributes for reliable element selection
+3. **Flaky tests**: Implement proper waiting strategies and retry logic
+4. **Environment issues**: Verify `.env` file configuration
+
+### Debug Mode
+
+```bash
+# Run tests in debug mode
+npm run cypress:debug
+
+# Enable verbose logging
+DEBUG=cypress:* npm run cypress:run
+```
+
+## 📞 Support
+
+- **Issues**: [GitHub Issues](https://github.com/lfyagya/cypress-automation-boilerplate/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/lfyagya/cypress-automation-boilerplate/discussions)
+- **Documentation**: [Cypress Official Docs](https://docs.cypress.io)
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## � Acknowledgments
+
+- [Cypress.io](https://cypress.io) for the amazing testing framework
+- [Cypress Real World App](https://github.com/cypress-io/cypress-realworld-app) for inspiration
+- [Testing Library](https://testing-library.com) for accessibility best practices
 
 ---
 
-Happy Automation! Happy Testing! 🔥
+**Happy Testing! 🔥**
+
+*Built with ❤️ for QA teams who want to write better, more maintainable tests.*
