@@ -7,7 +7,7 @@ export class EditUserPage {
   fillEmployeeName(name) {
     cy.get('.oxd-autocomplete-text-input > input').clear();
     cy.type(name);
-    cy.wait(3000); // eslint-disable-line cypress/no-unnecessary-waiting
+    cy.wait(3000); //eslint-disable-line cypress/no-unnecessary-waiting
     cy.get('.oxd-autocomplete-dropdown').should('be.visible');
     cy.get('.oxd-autocomplete-option').first().click();
   }
