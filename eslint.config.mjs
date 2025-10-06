@@ -1,10 +1,8 @@
-// eslint.config.mjs
 import globals from 'globals';
 import pluginJs from '@eslint/js';
 import prettierPlugin from 'eslint-plugin-prettier';
-import prettierConfig from 'eslint-config-prettier';
 import pluginCypress from 'eslint-plugin-cypress/flat';
-// /** @type {import('eslint').Linter.FlatConfig[]} */
+
 export default [
   {
     files: ['cypress/**/*.js'],
@@ -39,5 +37,4 @@ export default [
   },
   pluginCypress.configs.recommended,
   pluginJs.configs.recommended,
-  prettierConfig,
 ];
