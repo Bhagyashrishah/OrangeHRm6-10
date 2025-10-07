@@ -26,7 +26,10 @@ Cypress.Commands.add('logout', () => {
 
 Cypress.Commands.add('login', (username, password) => {
   cy.visit('/');
-  cy.get('input[name="username"]', { timeout: 10000 }).type(username);
+  cy.get('input[name="username"]', { timeout: 20000 }).type(username);
+
+  // cy.get('[placeholder="Username"]', { timeout: 10000 }).type(username);
+
   cy.get('input[name="password"]').type(password);
   cy.get('button[type="submit"]').click();
 
