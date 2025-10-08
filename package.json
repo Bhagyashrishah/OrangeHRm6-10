@@ -28,9 +28,7 @@
     "prettier": "^3.6.2"
   },
   "lint-staged": {
-    "cypress/**/*.js": [
-      "npx eslint --fix",
-      "npx prettier --write"
-    ]
+    "*.js": "eslint --fix",
+    "*.ts": "eslint --fix"
   }
 }
