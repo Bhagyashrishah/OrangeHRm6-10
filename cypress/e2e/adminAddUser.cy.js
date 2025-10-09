@@ -10,7 +10,7 @@ describe('Admin - Add User Flow', () => {
 
   beforeEach(function () {
     // Intercept login
-    cy.intercept('GET', '**/web/index.php/auth/login').as('loginPage');
+    // cy.intercept('GET', '**/web/index.php/auth/login').as('loginPage');
 
     // Visit login
     cy.visit('/web/index.php/auth/login');

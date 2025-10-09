@@ -1,104 +1,61 @@
-// fixture file use karayche asle tr // const { defineConfig } = require('cypress');
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-undef */
 
-// module.exports = defineConfig({
-//   e2e: {
-//     //baseUrl: 'https://opensource-demo.orangehrmlive.com',
-//     baseurl: cypress.env(CYPRESS_BASEURL),
-//     setupNodeEvents(on, config) {
-//       // implement node events if needed
-//     },
-//     watchForFileChanges: true
-//   }
-// });
-//env - baseural use kela 
-// const { defineConfig } = require('cypress');
-// module.exports = defineConfig({
-//   e2e: {
-//     baseUrl: process.env.CYPRESS_BASEURL || 'https://opensource-demo.orangehrmlive.com',
-//     setupNodeEvents(on, config) {
-//       // implement node events if needed
-
-//     },
-//     watchForFileChanges: true
-//   }
-// });
-
-//.env file use so dotenv pulgin install 
-
-// const { defineConfig } = require('cypress');
-// const dotenvPlugin = require('cypress-dotenv');
-
-// module.exports = defineConfig({
-//   e2e: {
-//     baseUrl: process.env.CYPRESS_BASEURL || 'https://opensource-demo.orangehrmlive.com',
-//     defaultCommandTimeout: 10000,
-//     setupNodeEvents(on, config) {
-//       // Load .env variables and merge into Cypress.env()
-//       return dotenvPlugin(config);
-//     },
-//   },
-// });
-// const { defineConfig } = require("cypress");
-
-// module.exports = defineConfig({
-//   e2e: {
-//     reporter: "mochawesome",
-//     reporterOptions: {
-//       reportDir: "cypress/reports",   // Folder to save reports
-//       overwrite: false,
-//       html: true,                     // Generate HTML report
-//       json: true                      // Generate JSON report
-//     },
-//     setupNodeEvents(on, config) {
-//       return config;
-//     }
-//   }
-// });
-
+const dotenv = require('dotenv');
+dotenv.config(); // Load .env file variables
 const { defineConfig } = require('cypress');
-const dotenvPlugin = require('cypress-dotenv');
+const fs = require('fs');
+const path = require('path');
 
 module.exports = defineConfig({
+  env: {
+    CYPRESS_USERNAME: process.env.CYPRESS_USERNAME,
+    CYPRESS_PASSWORD: process.env.CYPRESS_PASSWORD,
+    grepFilterSpecs: true,
+  },
   e2e: {
-    baseUrl: process.env.CYPRESS_BASEURL || 'https://opensource-demo.orangehrmlive.com',
-    defaultCommandTimeout: 10000,
-
-    // ✅ Add env block here
-    env: {
-      CYPRESS_USERNAME: process.env.CYPRESS_USERNAME || 'Admin',
-      CYPRESS_PASSWORD: process.env.CYPRESS_PASSWORD || 'admin123',
-      CYPRESS_BASEURL: process.env.CYPRESS_BASEURL || 'https://opensource-demo.orangehrmlive.com'
-    },
-
-    // Reporter config
-    reporter: 'mochawesome',
-    reporterOptions: {
-      reportDir: 'cypress/reports',
-      overwrite: false,
-      html: true,
-      json: true
-    },
-
-    // Node event setup
+    watchForFileChanges: false,
+    baseUrl: process.env.CYPRESS_BASEURL,
+    specPattern: getSpecPattern(),
     setupNodeEvents(on, config) {
-      // Load .env variables
-      config = dotenvPlugin(config);
-
-      // You can add more event listeners here if needed
+      // Register the mochawesome reporter
+      require('cypress-mochawesome-reporter/plugin')(on);
+      // Register grep plugin for the node process
+      require('@cypress/grep/src/plugin')(config);
       return config;
-    }
-  }
+    },
+  },
+  defaultCommandTimeout: 10000,
+  pageLoadTimeout: 50000,
+  reporter: 'cypress-mochawesome-reporter',
+  reporterOptions: {
+    reportDir: 'cypress/mochaReports',
+    overwrite: true,
+    saveJson: true,
+    html: true, // Ensure HTML is enabled
+    reportFilename: 'mochawesome-report',
+    charts: true,
+    embeddedScreenshots: true,
+    inlineAssets: true,
+    saveAllAttempts: false,
+  },
 });
 
+function getEnvironment() {
+  const env = process.env.CYPRESS_ENVIRONMENT;
+  if (!env) {
+    throw new Error('CYPRESS_ENVIRONMENT is required but not set.');
+  }
+  return env;
+}
 
+function getSpecPattern() {
+  const isDev = getEnvironment() === 'dev';
+  const testType = isDev ? 'end-to-end' : 'smoke';
 
+  console.log(
+    `Executing ${testType} Tests in ${isDev ? 'DEV' : 'PROD'} environment`
+  );
 
-
-
-
-
-
-
-
-
-
+  return path.join('cypress', 'e2e', '**', `${testType}`, `**`, `*.js`);
+}
